@@ -1,14 +1,14 @@
 import { WebSocketServer, WebSocket } from "ws";
 import { twitchSocket } from "./chatSockets/twitch";
 import { youtube } from "./chatSockets/youtube";
+import { kick } from "./chatSockets/kick";
 import { messageParser, updateConfig } from "../utils";
-import axios from "axios";
 
 
 
 const processMessage = async (message: Buffer, ws: WebSocket) => {
   const parsedMessage = messageParser(message);
-  console.log("Received message:", parsedMessage);
+  console.info("Received message:", parsedMessage);
 
   switch (parsedMessage.type) {
     case "config":
@@ -27,7 +27,7 @@ export const startWebSocketServer = (port: number) => {
   const wss = new WebSocketServer({ port });
 
   wss.on("connection", (ws: WebSocket) => {
-    console.log("New WebSocket connection");
+    console.info("New WebSocket connection");
     ws.on("message", (message: Buffer) => {
       try {
         processMessage(message, ws);
@@ -36,6 +36,7 @@ export const startWebSocketServer = (port: number) => {
       }
     });
     twitchSocket(ws);
+    kick(ws);
     setInterval(() => {
       youtube(ws)
     }, 5000); // 5 second
