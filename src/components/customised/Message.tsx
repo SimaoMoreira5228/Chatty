@@ -24,7 +24,6 @@ export const Message = ({
   frankerFaceZEmotes,
   className,
 }: MessageTypes) => {
-
   betterEmotes.forEach((emote: BetterEmote) => {
     const emoteRegex = new RegExp(emote.code, "g");
     message = message.replace(emoteRegex, (match) => {
@@ -41,7 +40,10 @@ export const Message = ({
 
   emotesRaw.forEach((emote: string) => {
     const [id, start, end] = emote.split(":");
-    const emoteRegex = new RegExp(message.slice(parseInt(start, 10), parseInt(end, 10) + 1), "g");
+    const emoteRegex = new RegExp(
+      message.slice(parseInt(start, 10), parseInt(end, 10) + 1),
+      "g"
+    );
     message = message.replace(emoteRegex, (match) => {
       return `<img src="https://static-cdn.jtvnw.net/emoticons/v2/${id}/default/dark/3.0" alt="${match}" class="h-6 w-6" />`;
     });
