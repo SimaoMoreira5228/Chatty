@@ -78,11 +78,11 @@ api.post(
       if (parsedResult.chatroom !== undefined) {
         chatroom = parsedResult.chatroom;
 
-        setTimeout(() => {
+        reply.status(200).send({ kickUserChatroom: chatroom.id.toFixed() }).then(() => {
           win.close();
-        }, 2000); // 2 seconds
-
-        reply.status(200).send({ kickUserChatroom: chatroom.id.toFixed() });
+        }, () => {
+          win.close();
+        });
       } else {
         win.close();
         reply.status(500).send({
