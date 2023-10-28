@@ -6,6 +6,8 @@ import { FFEmotes, type WebsocketMessageData } from "@/lib/types";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "./svgs/Spinner";
+import { config } from "node:process";
+import { kick } from "websocket/chatSockets/kick";
 
 export const App = () => {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -66,7 +68,7 @@ export const App = () => {
     });
 
     client.addEventListener("close", () => {
-      console.log("WebSocket connection closed");
+      console.info("WebSocket connection closed");
     });
   }, []);
 
@@ -113,7 +115,7 @@ export const App = () => {
     setConfigModalOpen(false);
   };
 
-  const saveConfig = (
+  const saveConfig = async (
     twitchUser: string,
     youtubeVideoId: string,
     youtubeApiKey: string,
@@ -126,7 +128,25 @@ export const App = () => {
         youtubeVideoId,
         youtubeApiKey,
         kickUser,
+        kickUserChatroom: "",
       };
+
+      let getChatRoomResponse;
+
+      if (kickUser !== "") {
+        getChatRoomResponse = await axios.post(
+          "http://localhost:1349/api/get-kick-user-chatroom",
+          { kickUser },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      }
+
+      configData.kickUserChatroom = getChatRoomResponse?.data.kickUserChatroom;
+
       axios.post("http://localhost:1349/api/update-config", configData, {
         headers: {
           "Content-Type": "application/json",
@@ -145,6 +165,12 @@ export const App = () => {
   };
 
   useEffect(() => {
+    if (messages.size > 100) {
+      const firstMessage = messages.values().next().value;
+      messages.delete(firstMessage.id);
+      setMessages(new Map(messages));
+    }
+
     const container = messagesContainerRef.current;
     if (container) {
       container.scrollTop = container.scrollHeight;
@@ -181,6 +207,7 @@ export const App = () => {
             provider={message.provider}
             isSub={message.isSub}
             isMod={message.isMod}
+            isOwner={message.isOwner}
             badges={message.badges}
             badgesRaw={message.badgesRaw}
             emotes={message.emotes}

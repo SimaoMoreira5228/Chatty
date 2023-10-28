@@ -17,6 +17,7 @@ export const Message = ({
   provider,
   isSub,
   isMod,
+  isOwner,
   badges,
   badgesRaw,
   emotes,
@@ -27,59 +28,36 @@ export const Message = ({
   frankerFaceZEmotes,
   className,
 }: MessageTypes) => {
-  const words = message.split(" ");
-  const newMessage = words.map((word) => {
-    const betterEmote = betterEmotes.find(
-      (emote: BetterEmote) => emote.code === word
-    );
-    const ffEmote: FFEmotes = frankerFaceZEmotes.find(
-      (emote: FFEmotes) => emote.name === word
-    );
-    if (betterEmote) {
-      // BetterTTV emotes
-      return (
-        <img
-          src={`https://cdn.betterttv.net/emote/${betterEmote.id}/3x.webp`}
-          alt={word}
-          className="w-6 h-6"
-        />
-      );
-    } else if (ffEmote) {
-      // FrankerFaceZ emotes
-      return <img src={ffEmote.urls[4]} alt={word} className="w-6 h-6" />;
-    } else if (emotesRaw) {
-      // twitch emotes
-      const stringReplacements: any[] = [];
 
-      Object.entries(emotes).forEach(([id, positions]) => {
-        const position = positions[0];
-        const [start, end] = position.split("-");
-        const stringToReplace = message.substring(
-          parseInt(start, 10),
-          parseInt(end, 10) + 1
-        );
-
-        stringReplacements.push({
-          stringToReplace: stringToReplace,
-          replacement: `<img src="https://static-cdn.jtvnw.net/emoticons/v2/${id}/default/dark/1.0" width="30" height="5">`,
-        });
-      });
-
-      const messageHTML = stringReplacements.reduce(
-        (acc, { stringToReplace, replacement }) => {
-          return acc.split(stringToReplace).join(replacement);
-        },
-        message
-      );
-
-      const sanitizedHTML = DOMPurify.sanitize(messageHTML);
-
-      const parsedHTML = HTMLReactParser(sanitizedHTML);
-
-      return parsedHTML;
-    }
-    return " " + word + " ";
+  betterEmotes.forEach((emote: BetterEmote) => {
+    const emoteRegex = new RegExp(emote.code, "g");
+    message = message.replace(emoteRegex, (match) => {
+      return `<img src="https://cdn.betterttv.net/emote/${emote.id}/3x.webp" alt="${match}" class="h-6 w-6" />`;
+    });
   });
+
+  frankerFaceZEmotes.forEach((emote: FFEmotes) => {
+    const emoteRegex = new RegExp(emote.name, "g");
+    message = message.replace(emoteRegex, (match) => {
+      return `<img src="${emote.urls[4]}" alt="${match}" class="h-6 w-6" />`;
+    });
+  });
+
+  emotesRaw.forEach((emote: string) => {
+    const [id, start, end] = emote.split(":");
+    const emoteRegex = new RegExp(message.slice(parseInt(start, 10), parseInt(end, 10) + 1), "g");
+    message = message.replace(emoteRegex, (match) => {
+      return `<img src="https://static-cdn.jtvnw.net/emoticons/v2/${id}/default/dark/3.0" alt="${match}" class="h-6 w-6" />`;
+    });
+  });
+
+  const emoteRegex = /\[emote:(\d+):(\w+)\]/g;
+  message = message.replace(emoteRegex, (match, id, code) => {
+    return `<img src="https://files.kick.com/emotes/${id}/fullsize" alt="${code}" class="h-6 w-6" />`;
+  });
+
+  const sanitizedHTML = DOMPurify.sanitize(message);
+  const parsedHTML = HTMLReactParser(sanitizedHTML);
 
   return (
     <Alert className={className}>
@@ -98,14 +76,14 @@ export const Message = ({
               </Badge>
             )}
             {isMod && <Badge className="ml-2 h-4">Moderator</Badge>}
-            {name === channelName && (
+            {isOwner && (
               <Badge variant={"secondary"} className="ml-2 h-4">
                 Owner
               </Badge>
             )}
           </div>
           <AlertDescription className="flex flex-row">
-            {newMessage}
+            {parsedHTML}
           </AlertDescription>
         </div>
       </div>
