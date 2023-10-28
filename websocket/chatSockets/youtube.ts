@@ -73,7 +73,7 @@ export const youtube = async (ws: WebSocket) => {
     chatMessages.push(newChatMessage);
   }
   if (!chatMessages) return;
-  // TODO: handle message when it has emojis
+  // TODO: handle message when it has emojis/special characters
   if (ws.readyState === WebSocket.OPEN) {
     chatMessages.map((chatMessage) => {
       ws.send(JSON.stringify(chatMessage));
