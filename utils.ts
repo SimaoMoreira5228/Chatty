@@ -1,4 +1,4 @@
-import { type Message, type ConfigMessage, KickMessage } from "./types";
+import { type Message, type ConfigMessage } from "./types";
 import fs from "fs";
 
 // put the file into a folder called chatty on the appdata folder
@@ -39,13 +39,14 @@ export const updateConfig = (message: ConfigMessage) => {
   fs.writeFileSync(configFileUrl, configDataString);
 };
 
-export const readConfig = () => {
+export const readConfig = (): ConfigMessage => {
   if (!fs.existsSync(configFileUrl)) {
     const configData: ConfigMessage = {
       twitchUser: "",
       youtubeVideoId: "",
       youtubeApiKey: "",
       kickUser: "",
+      kickUserChatroom: "",
     };
     updateConfig(configData);
   }
