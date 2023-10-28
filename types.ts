@@ -5,17 +5,18 @@ export type ConfigMessage = {
   youtubeVideoId: string;
   youtubeApiKey: string;
   kickUser: string;
+  kickUserChatroom: string;
 };
 
 export type ChatMessage = {
   id: string;
   name: string;
   provider: string;
-  isSub: boolean;
-  isMod: boolean;
-  isOwner: boolean;
+  isSub: boolean | undefined;
+  isMod: boolean | undefined;
+  isOwner: boolean | undefined;
   badgesRaw: string[];
-  badges: never[] | Badges;
+  badges: never[] | Badges | { type: string; text: string }[];
   emotesRaw: string[];
   emotes: never[] | { [emoteid: string]: string[] };
   message: any;
@@ -56,22 +57,46 @@ export type YoutubeResponse = {
 };
 
 export type KickMessage = {
-  id: string;
-  chatroom_id: number;
-  content: string;
-  type: string;
-  created_at: string;
-  sender: {
-    id: number;
-    username: string;
-    slug: string;
-    identity: { color: string; badges: any };
-  };
-  metadata?: {
-    original_sender: { id: string; username: string };
-    original_message: {
-      id: string;
-      content: string;
+  event: string;
+  data: {
+    id: string;
+    chatroom_id: number;
+    content: string;
+    type: string;
+    created_at: string;
+    sender: {
+      id: number;
+      username: string;
+      slug: string;
+      identity: {
+        color: string;
+        badges: { type: string; text: string }[];
+      };
+    };
+    metadata?: {
+      original_sender: { id: string; username: string };
+      original_message: {
+        id: string;
+        content: string;
+      };
     };
   };
+  channel: string;
+};
+
+export type KickChatRoom = {
+  id: number;
+  chatable_type: string;
+  channel_id: number;
+  created_at: string;
+  updated_at: string;
+  chat_mode_old: string;
+  chat_mode: string;
+  slow_mode: boolean;
+  chatable_id: number;
+  followers_mode: boolean;
+  subscribers_mode: boolean;
+  emotes_mode: boolean;
+  message_interval: number;
+  following_min_duration: number;
 };

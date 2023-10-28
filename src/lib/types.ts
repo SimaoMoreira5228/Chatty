@@ -38,11 +38,11 @@ export type WebsocketMessageData = {
   id: string;
   name: string;
   provider: string;
-  isSub: boolean;
-  isMod: boolean;
-  isOwner: boolean;
+  isSub: boolean | undefined;
+  isMod: boolean | undefined;
+  isOwner: boolean | undefined;
   badgesRaw: string[];
-  badges: never[] | Badges;
+  badges: never[] | Badges | { type: string; text: string }[];
   emotesRaw: string[];
   emotes: never[] | { [emoteid: string]: string[] };
   message: string;
@@ -52,10 +52,11 @@ export type WebsocketMessageData = {
 export type MessageTypes = {
   name: string;
   provider: string;
-  isSub: boolean;
-  isMod: boolean;
+  isSub: boolean | undefined;
+  isMod: boolean | undefined;
+  isOwner: boolean | undefined;
   badgesRaw: string[];
-  badges: never[] | Badges;
+  badges: never[] | Badges | { type: string; text: string }[];
   emotesRaw: string[];
   emotes: never[] | { [emoteid: string]: string[] };
   message: string;
