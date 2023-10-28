@@ -66,7 +66,7 @@ app.on("activate", () => {
 });
 
 app.whenReady().then(() => {
-  createWindow();
   startWebSocketServer(1348);
   api.listen({ port: 1349 });
+  createWindow();
 });
