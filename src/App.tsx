@@ -9,6 +9,7 @@ import { Spinner } from "./svgs/Spinner";
 
 export const App = () => {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const [autoScroll, setAutoScroll] = useState(true);
   const [isConfigModalOpen, setConfigModalOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [betterEmotes, setBetterEmotes] = useState([]);
@@ -68,17 +69,13 @@ export const App = () => {
     client.addEventListener("close", () => {
       console.info("WebSocket connection closed");
     });
-  }, []);
 
-  useEffect(() => {
     axios
       .get("https://api.betterttv.net/3/cached/emotes/global")
       .then((res) => {
         setBetterEmotes(res.data);
       });
-  }, []);
 
-  useEffect(() => {
     axios.get("https://api.frankerfacez.com/v1/set/global").then((res) => {
       const sets = res.data.sets as Record<string, { emoticons: FFEmotes[] }>;
       for (const set of Object.values(sets)) {
@@ -169,11 +166,20 @@ export const App = () => {
       setMessages(new Map(messages));
     }
 
+    if (messagesContainerRef.current) {
+      const container = messagesContainerRef.current;
+      container.addEventListener("scroll", () => {
+        if (container.scrollTop !== container.scrollHeight) {
+          setAutoScroll(false);
+        }
+      });
+    }
+
     const container = messagesContainerRef.current;
-    if (container) {
+    if (container && autoScroll) {
       container.scrollTop = container.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, autoScroll]);
 
   return (
     <div className="flex items-center justify-center h-screen w-screen">
