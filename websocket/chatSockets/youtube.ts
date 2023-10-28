@@ -79,9 +79,15 @@ export const youtube = async (ws: WebSocket) => {
       ws.send(JSON.stringify(chatMessage));
     });
   } else {
-    console.error(
-      "WebSocket connection is not open. Current state:",
-      ws.readyState
+    const websocketStates = {
+      0: "CONNECTING",
+      1: "OPEN",
+      2: "CLOSING",
+      3: "CLOSED",
+    };
+    throw new Error(
+      "[Youtube]: WebSocket connection is not open. Current state:" +
+        websocketStates[ws.readyState]
     );
   }
 };

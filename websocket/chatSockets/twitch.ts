@@ -6,7 +6,9 @@ import fs from "fs";
 
 export const twitchSocket = async (ws: WebSocket) => {
   const config = readConfig();
-  const channels = config.twitchUser.split(",").map((user: string) => user.trim());
+  const channels = config.twitchUser
+    .split(",")
+    .map((user: string) => user.trim());
   if (config.twitchUser) return;
   let twitchClient: tmi.Client;
 
@@ -38,9 +40,15 @@ export const twitchSocket = async (ws: WebSocket) => {
       if (ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify(newChatMessage));
       } else {
-        console.error(
-          "WebSocket connection is not open. Current state:",
-          ws.readyState
+        const websocketStates = {
+          0: "CONNECTING",
+          1: "OPEN",
+          2: "CLOSING",
+          3: "CLOSED",
+        };
+        throw new Error(
+          "[Twitch]: WebSocket connection is not open. Current state:" +
+            websocketStates[ws.readyState]
         );
       }
     });
@@ -57,4 +65,3 @@ export const twitchSocket = async (ws: WebSocket) => {
     startTwitchSocket(ws, newChannels);
   });
 };
-
