@@ -1,7 +1,6 @@
 import { type Message, type ConfigMessage } from "./types";
 import fs from "fs";
 
-// put the file into a folder called chatty on the appdata folder if on linux use process.env.HOME
 export const configFileUrl = `${process.env.APPDATA || process.env.HOME}/chatty/config.json`;
 
 export const messageParser = (message: Buffer): Message => {

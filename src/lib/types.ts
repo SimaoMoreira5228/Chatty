@@ -65,3 +65,10 @@ export type MessageTypes = {
   frankerFaceZEmotes: any[];
   className?: string;
 };
+
+export type VersionData = {
+  version: string;
+  latestVersion: string;
+  isOutdated: boolean;
+  lastestVersionURL: string;
+};

@@ -2,14 +2,19 @@ import { Settings, Trash } from "lucide-react";
 import { Message } from "./components/customised/Message";
 import { Button } from "@/components/ui/button";
 import { ConfigModal } from "./components/customised/ConfigModal";
-import { FFEmotes, type WebsocketMessageData } from "@/lib/types";
+import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/components/ui/use-toast";
+import { FFEmotes, VersionData, type WebsocketMessageData } from "@/lib/types";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "./svgs/Spinner";
+import { getChattyVersion } from "@/lib/utils";
 
 export const App = () => {
+  const { toast } = useToast();
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const [autoScroll, setAutoScroll] = useState(true);
+  const [wasVersionTostShown, setWasVersionToastShown] = useState(false);
   const [isConfigModalOpen, setConfigModalOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [betterEmotes, setBetterEmotes] = useState([]);
@@ -187,6 +192,37 @@ export const App = () => {
     }
   }, [messages, autoScroll]);
 
+  function versionNotification(version: VersionData) {
+    toast({
+      title: "A new version of Chatty is available!",
+      description: (
+        <>
+          You are currently using version {version.version} of Chatty. The
+          latest version is {version.latestVersion}. You can download the latest
+          version from{" "}
+          <a
+            href={version.lastestVersionURL}
+            target="_blank"
+            rel="noreferrer"
+            className="underline text-blue-500"
+          >
+            here
+          </a>
+          .
+        </>
+      ),
+    });
+  }
+
+  if (!wasVersionTostShown) {
+    getChattyVersion().then((res) => {
+      if (res.version !== res.latestVersion) {
+        versionNotification(res);
+        setWasVersionToastShown(true);
+      }
+    });
+  }
+
   return (
     <div className="flex items-center justify-center h-screen w-screen">
       <Button
@@ -242,6 +278,7 @@ export const App = () => {
           <Spinner className="w-4 h-4" />
         </div>
       )}
+      <Toaster />
     </div>
   );
 };
