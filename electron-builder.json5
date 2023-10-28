@@ -23,7 +23,7 @@
   "win": {
     "target": [
       {
-        "target": "nsis",
+        "target": "msi",
         "arch": [
           "x64"
         ]
@@ -32,11 +32,12 @@
     "artifactName": "${productName}-Windows-${version}-Setup.${ext}",
     "icon": "public/chatty.ico"
   },
-  "nsis": {
+  "msi": {
     "oneClick": false,
     "perMachine": false,
-    "allowToChangeInstallationDirectory": true,
-    "deleteAppDataOnUninstall": false
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "runAfterFinish": true
   },
   "linux": {
     "target": [
