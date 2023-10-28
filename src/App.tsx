@@ -169,7 +169,13 @@ export const App = () => {
     if (messagesContainerRef.current) {
       const container = messagesContainerRef.current;
       container.addEventListener("scroll", () => {
-        if (container.scrollTop !== container.scrollHeight) {
+        //  in range of 20 pixels
+        if (
+          container.scrollTop + container.offsetHeight >=
+          container.scrollHeight - 20
+        ) {
+          setAutoScroll(true);
+        } else {
           setAutoScroll(false);
         }
       });
