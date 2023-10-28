@@ -2,16 +2,13 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
-  type BetterEmote,
   type MessageTypes,
-  type FFEmotes,
 } from "@/lib/types";
 import kick from "@/svgs/Kick.svg";
 import twitch from "@/svgs/Twitch.svg";
 import youtube from "@/svgs/Youtube.svg";
 import HTMLReactParser from "html-react-parser";
 import DOMPurify from "dompurify";
-import axios from "axios";
 
 export const Message = ({
   name,
@@ -19,9 +16,7 @@ export const Message = ({
   isSub,
   isMod,
   isOwner,
-  emotes,
   message,
-  channelName,
   betterEmotes,
   frankerFaceZEmotes,
   sevenTVEmotes,
