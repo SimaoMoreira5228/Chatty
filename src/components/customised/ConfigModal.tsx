@@ -29,26 +29,31 @@ interface ConfigModalProps {
 }
 
 interface ConfigInputProps {
+  id: string;
   label: string;
+  placeholder: string;
   value: string;
   required: boolean;
   onChange: (value: string) => void;
 }
 
 const ConfigInput: React.FC<ConfigInputProps> = ({
+  id,
   label,
+  placeholder,
   value,
   required,
   onChange,
 }) => (
   <>
-    <Label htmlFor={label}>{label}</Label>
+    <Label htmlFor={id}>{label}</Label>
     <Input
-      id={label}
-      placeholder={`Enter your ${label}`}
+      id={id}
+      placeholder={placeholder}
       value={value}
       required={required}
       onChange={(e) => onChange(e.target.value)}
+      className="mb-2"
     />
   </>
 );
@@ -80,25 +85,33 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
           </CardHeader>
           <CardContent className="w-[60%]">
             <ConfigInput
-              label="youtubeLink"
+              id={Math.random().toString()}
+              label="Youtube Link or ID"
+              placeholder="https://www.youtube.com/watch?v=..."
               value={ylink}
               required={false}
               onChange={setYlink}
             />
             <ConfigInput
-              label="youtubeKey"
+              id={Math.random().toString()}
+              label="Youtube API Key"
+              placeholder="API Key"
               value={ykey}
               required={ylink !== ""}
               onChange={setYkey}
             />
             <ConfigInput
-              label="twitchUser"
+              id={Math.random().toString()}
+              label="Twitch Username"
+              placeholder="Twitch Username"
               value={tuser}
               onChange={setTuser}
               required={false}
             />
             <ConfigInput
-              label="kickUser"
+              id={Math.random().toString()}
+              label="Kick Username"
+              placeholder="Kick Username"
               value={kuser}
               onChange={setKuser}
               required={false}
