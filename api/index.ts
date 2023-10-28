@@ -102,7 +102,7 @@ api.post(
 
 api.get(
   "/api/get-config",
-  async (request: FastifyRequest, reply: FastifyReply) => {
+  async (_request: FastifyRequest, reply: FastifyReply) => {
     const config = readConfig();
     reply.send(config);
   }

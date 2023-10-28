@@ -6,7 +6,7 @@ import { messageParser, updateConfig } from "../utils";
 
 
 
-const processMessage = async (message: Buffer, ws: WebSocket) => {
+const processMessage = async (message: Buffer, _ws: WebSocket) => {
   const parsedMessage = messageParser(message);
   console.info("Received message:", parsedMessage);
 

@@ -6,8 +6,6 @@ import { FFEmotes, type WebsocketMessageData } from "@/lib/types";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "./svgs/Spinner";
-import { config } from "node:process";
-import { kick } from "websocket/chatSockets/kick";
 
 export const App = () => {
   const messagesContainerRef = useRef<HTMLDivElement>(null);

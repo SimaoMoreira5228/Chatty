@@ -18,12 +18,8 @@ export const Message = ({
   isSub,
   isMod,
   isOwner,
-  badges,
-  badgesRaw,
-  emotes,
   emotesRaw,
   message,
-  channelName,
   betterEmotes,
   frankerFaceZEmotes,
   className,
@@ -52,7 +48,7 @@ export const Message = ({
   });
 
   const emoteRegex = /\[emote:(\d+):(\w+)\]/g;
-  message = message.replace(emoteRegex, (match, id, code) => {
+  message = message.replace(emoteRegex, (_match, id, code) => {
     return `<img src="https://files.kick.com/emotes/${id}/fullsize" alt="${code}" class="h-6 w-6" />`;
   });
 
