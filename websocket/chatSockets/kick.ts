@@ -55,23 +55,10 @@ export const kick = async (ws: WebSocket) => {
               .includes("subscriber"),
           };
           if (!messsage.message) return;
-          if (ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify(messsage));
-          } else {
-            const websocketStates = {
-              0: "CONNECTING",
-              1: "OPEN",
-              2: "CLOSING",
-              3: "CLOSED",
-            };
-            throw new Error(
-              "[Kick]: WebSocket connection is not open. Current state:" +
-                websocketStates[ws.readyState]
-            );
-          }
+          ws.send(JSON.stringify(messsage));
         }
       } catch (error) {
-        console.error(error);
+        throw new Error(`[Kick]: ${error}`);
       }
     });
   }
