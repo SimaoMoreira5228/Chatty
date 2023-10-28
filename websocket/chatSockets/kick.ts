@@ -78,7 +78,7 @@ export const kick = async (ws: WebSocket) => {
 
   startKickSocket();
 
-  fs.watchFile(configFileUrl, (_curr, _prev) => {
+  fs.watchFile(configFileUrl, () => {
     kickSocket.close();
     startKickSocket();
   });

@@ -6,7 +6,7 @@ import { messageParser, updateConfig } from "../utils";
 
 
 
-const processMessage = async (message: Buffer, _ws: WebSocket) => {
+const processMessage = async (message: Buffer) => {
   const parsedMessage = messageParser(message);
   console.info("Received message:", parsedMessage);
 
@@ -30,7 +30,7 @@ export const startWebSocketServer = (port: number) => {
     console.info("New WebSocket connection");
     ws.on("message", (message: Buffer) => {
       try {
-        processMessage(message, ws);
+        processMessage(message);
       } catch (error) {
         console.error("Error processing message:", error);
       }

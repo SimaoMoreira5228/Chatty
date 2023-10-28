@@ -21,7 +21,8 @@ export const twitchSocket = async (ws: WebSocket) => {
       channels,
     });
     twitchClient.connect();
-    twitchClient.on("message", (channel, tags, message, _self) => {
+    twitchClient.on("message", (channel, tags, message) => {
+      console.log(message)
       const newChatMessage: ChatMessage = {
         id: tags["id"] ?? "",
         name: tags["display-name"] ?? "",
@@ -56,7 +57,7 @@ export const twitchSocket = async (ws: WebSocket) => {
 
   startTwitchSocket(ws, channels);
 
-  fs.watchFile(configFileUrl, (_curr, _prev) => {
+  fs.watchFile(configFileUrl, () => {
     const newConfig = readConfig();
     const newChannels = newConfig.twitchUser
       .split(",")
