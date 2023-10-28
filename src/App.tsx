@@ -160,7 +160,7 @@ export const App = () => {
   };
 
   useEffect(() => {
-    if (messages.size > 100) {
+    if (messages.size > 80) {
       const firstMessage = messages.values().next().value;
       messages.delete(firstMessage.id);
       setMessages(new Map(messages));
