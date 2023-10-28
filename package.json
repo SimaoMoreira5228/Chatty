@@ -1,7 +1,7 @@
 {
   "name": "chatty",
   "productName": "Chatty",
-  "description": "Get the Kick,Titch, Youtube chats in one place",
+  "description": "Get the Kick, Twitch, Youtube chats in one place",
   "author": "Simão Moreira",
   "private": true,
   "version": "1.0.0",
