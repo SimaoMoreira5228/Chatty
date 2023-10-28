@@ -4,7 +4,13 @@ import { Button } from "@/components/ui/button";
 import { ConfigModal } from "./components/customised/ConfigModal";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
-import { FFEmotes, VersionData, type WebsocketMessageData } from "@/lib/types";
+import {
+  BetterEmote,
+  SevenEmote,
+  FFEmotes,
+  VersionData,
+  type WebsocketMessageData,
+} from "@/lib/types";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "./svgs/Spinner";
@@ -17,8 +23,9 @@ export const App = () => {
   const [wasVersionTostShown, setWasVersionToastShown] = useState(false);
   const [isConfigModalOpen, setConfigModalOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [betterEmotes, setBetterEmotes] = useState([]);
-  const [frankerFaceZEmotes, setFrankerFaceZEmotes] = useState<any[]>([]);
+  const [betterEmotes, setBetterEmotes] = useState<BetterEmote[]>([]);
+  const [frankerFaceZEmotes, setFrankerFaceZEmotes] = useState<FFEmotes[]>([]);
+  const [sevenTVEmotes, setSevenTVEmotes] = useState<SevenEmote[]>([]);
   const [defaultValues, setDefaultValues] = useState({
     twitchUser: "",
     youtubeVideoId: "",
@@ -87,6 +94,11 @@ export const App = () => {
         setFrankerFaceZEmotes((emotes) => [...emotes, ...set.emoticons]);
       }
     });
+
+    axios.get("https://api.7tv.app/v2/emotes/global").then((res) => {
+      setSevenTVEmotes(res.data);
+    });
+
   }, []);
 
   const openConfigModal = async () => {
@@ -262,6 +274,7 @@ export const App = () => {
             message={message.message}
             betterEmotes={betterEmotes}
             frankerFaceZEmotes={frankerFaceZEmotes}
+            sevenTVEmotes={sevenTVEmotes}
             className="mb-2"
           />
         ))}

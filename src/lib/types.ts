@@ -25,6 +25,34 @@ export type FFEmotes = {
   width: number;
 };
 
+export type SevenEmote = {
+  id: string;
+  name: string;
+  owner: {
+    id: string;
+    twitch_id: string;
+    login: string;
+    display_name: string;
+    role: {
+      id: string;
+      name: string;
+      position: number;
+      color: number;
+      allowed: number;
+      denied: number;
+    };
+    profile_picture_id: string;
+  };
+  visibility: number;
+  visibility_simple: any[];
+  mime: string;
+  status: number;
+  tags: string[];
+  width: number[];
+  height: number[];
+  urls: [string, string][];
+};
+
 export type BetterEmote = {
   animated: boolean;
   code: string;
@@ -62,7 +90,8 @@ export type MessageTypes = {
   message: string;
   channelName: string;
   betterEmotes: BetterEmote[];
-  frankerFaceZEmotes: any[];
+  frankerFaceZEmotes: FFEmotes[];
+  sevenTVEmotes: SevenEmote[];
   className?: string;
 };
 
