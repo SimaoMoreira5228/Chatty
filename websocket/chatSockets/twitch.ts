@@ -9,7 +9,7 @@ export const twitchSocket = async (ws: WebSocket) => {
   const channels = config.twitchUser
     .split(",")
     .map((user: string) => user.trim());
-  if (config.twitchUser) return;
+  if (!config.twitchUser) return;
   let twitchClient: tmi.Client;
 
   const startTwitchSocket = async (ws: WebSocket, channels: string[]) => {
@@ -22,7 +22,6 @@ export const twitchSocket = async (ws: WebSocket) => {
     });
     twitchClient.connect();
     twitchClient.on("message", (channel, tags, message) => {
-      console.log(message)
       const newChatMessage: ChatMessage = {
         id: tags["id"] ?? "",
         name: tags["display-name"] ?? "",
